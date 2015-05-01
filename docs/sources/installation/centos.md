@@ -25,10 +25,7 @@ To run Docker on [CentOS-6.5](http://www.centos.org) or later, you will need
 kernel version 2.6.32-431 or higher as this has specific kernel fixes to allow
 Docker to run.
 
-## CentOS-7
-
-### Installation
-
+## Installing Docker - CentOS-7
 Docker is included by default in the CentOS-Extras repository. To install
 run the following command:
 
@@ -36,23 +33,7 @@ run the following command:
 
 Please continue with the [Starting the Docker daemon](#starting-the-docker-daemon).
 
-### Uninstallation
-
-To uninstall the Docker package:
-
-    $ sudo yum -y remove docker
-
-The above command will not remove images, containers, volumes, or user created
-configuration files on your host. If you wish to delete all images, containers,
-and volumes run the following command:
-
-    $ rm -rf /var/lib/docker
-
-You must delete the user created configuration files manually.
-
-## CentOS-6.5
-
-### Installation
+## Installing Docker - CentOS-6.5
 
 For CentOS-6.5, the Docker package is part of [Extra Packages
 for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL) repository,
@@ -75,20 +56,6 @@ Next, let's install the `docker-io` package which will install Docker on our hos
     $ sudo yum install docker-io
 
 Please continue with the [Starting the Docker daemon](#starting-the-docker-daemon).
-
-### Uninstallation
-
-To uninstall the Docker package:
-
-    $ sudo yum -y remove docker-io
-
-The above command will not remove images, containers, volumes, or user created
-configuration files on your host. If you wish to delete all images, containers,
-and volumes run the following command:
-
-    $ rm -rf /var/lib/docker
-
-You must delete the user created configuration files manually.
 
 ## Manual installation of latest Docker release
 

@@ -13,37 +13,19 @@ Currently the Fedora project will only support Docker when running on kernels
 shipped by the distribution. There are kernel changes which will cause issues
 if one decides to step outside that box and run non-distribution kernel packages.
 
-## Fedora 21 and later
+## Fedora 21 and later installation
 
-### Installation
-
-Install the Docker package which will install Docker on our host.
+Install the `docker` package which will install Docker on our host.
 
     $ sudo yum -y install docker
 
-To update the Docker package:
+To update the `docker` package:
 
     $ sudo yum -y update docker
 
 Please continue with the [Starting the Docker daemon](#starting-the-docker-daemon).
 
-### Uninstallation
-
-To uninstall the Docker package:
-
-    $ sudo yum -y remove docker
-
-The above command will not remove images, containers, volumes, or user created
-configuration files on your host. If you wish to delete all images, containers,
-and volumes run the following command:
-
-    $ rm -rf /var/lib/docker
-
-You must delete the user created configuration files manually.
-
-## Fedora 20
-
-### Installation
+## Fedora 20 installation
 
 For `Fedora 20`, there is a package name conflict with a system tray application
 and its executable, so the Docker RPM package was called `docker-io`.
@@ -54,25 +36,11 @@ package first.
     $ sudo yum -y remove docker
     $ sudo yum -y install docker-io
 
-To update the Docker package:
+To update the `docker` package:
 
     $ sudo yum -y update docker-io
 
 Please continue with the [Starting the Docker daemon](#starting-the-docker-daemon).
-
-### Uninstallation
-
-To uninstall the Docker package:
-
-    $ sudo yum -y remove docker-io
-
-The above command will not remove images, containers, volumes, or user created
-configuration files on your host. If you wish to delete all images, containers,
-and volumes run the following command:
-
-    $ rm -rf /var/lib/docker
-
-You must delete the user created configuration files manually.
 
 ## Starting the Docker daemon
 
