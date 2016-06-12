@@ -618,18 +618,8 @@ func (d *Dispatcher) Heartbeat(ctx context.Context, r *api.HeartbeatRequest) (*a
 	if err != nil {
 		return nil, err
 	}
-	nodeID := nodeInfo.NodeID
-	fields := logrus.Fields{
-		"node.id":      nodeID,
-		"node.session": r.SessionID,
-		"method":       "(*Dispatcher).Heartbeat",
-	}
-	if nodeInfo.ForwardedBy != nil {
-		fields["forwarder.id"] = nodeInfo.ForwardedBy.NodeID
-	}
-	log.G(ctx).WithFields(fields).Debugf("")
 
-	period, err := d.nodes.Heartbeat(nodeID, r.SessionID)
+	period, err := d.nodes.Heartbeat(nodeInfo.NodeID, r.SessionID)
 	return &api.HeartbeatResponse{Period: *ptypes.DurationProto(period)}, err
 }
 
@@ -639,9 +629,9 @@ func (d *Dispatcher) getManagers() []*api.WeightedPeer {
 	return d.lastSeenManagers
 }
 
-// Session is stream which controls agent connection.
+// Session is a stream which controls agent connection.
 // Each message contains list of backup Managers with weights. Also there is
-// special boolean field Disconnect which if true indicates that node should
+// a special boolean field Disconnect which if true indicates that node should
 // reconnect to another Manager immediately.
 func (d *Dispatcher) Session(r *api.SessionRequest, stream api.Dispatcher_SessionServer) error {
 	ctx := stream.Context()

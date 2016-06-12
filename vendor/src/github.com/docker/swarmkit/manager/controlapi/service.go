@@ -1,13 +1,13 @@
 package controlapi
 
 import (
+	"github.com/docker/engine-api/types/reference"
 	"github.com/docker/swarmkit/api"
 	"github.com/docker/swarmkit/identity"
 	"github.com/docker/swarmkit/manager/state/store"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 )
 
 func validateResources(r *api.Resources) error {
@@ -16,7 +16,7 @@ func validateResources(r *api.Resources) error {
 	}
 
 	if r.NanoCPUs != 0 && r.NanoCPUs < 1e6 {
-		return grpc.Errorf(codes.InvalidArgument, "invalid cpu value %d: Must be at least %d", r.NanoCPUs, 1e6)
+		return grpc.Errorf(codes.InvalidArgument, "invalid cpu value %g: Must be at least %g", float64(r.NanoCPUs)/1e9, 1e6/1e9)
 	}
 
 	if r.MemoryBytes != 0 && r.MemoryBytes < 4*1024*1024 {
@@ -60,6 +60,10 @@ func validateServiceSpecTemplate(spec *api.ServiceSpec) error {
 	if container.Image == "" {
 		return grpc.Errorf(codes.InvalidArgument, "ContainerSpec: image reference must be provided")
 	}
+
+	if _, _, err := reference.Parse(container.Image); err != nil {
+		return grpc.Errorf(codes.InvalidArgument, "ContainerSpec: %q is not a valid repository/tag", container.Image)
+	}
 	return nil
 }
 
@@ -84,17 +88,6 @@ func validateServiceSpec(spec *api.ServiceSpec) error {
 func (s *Server) CreateService(ctx context.Context, request *api.CreateServiceRequest) (*api.CreateServiceResponse, error) {
 	if err := validateServiceSpec(request.Spec); err != nil {
 		return nil, err
-	}
-
-	md, ok := metadata.FromContext(ctx)
-	if ok {
-		// retrieve registry auth from the metadata and update if non-empty
-		registryAuth, exists := md["x-registry-auth"]
-		// TODO(nishanttotla): We don't want to modify the spec. This is a temporary fix
-		// and should go away eventually
-		if exists {
-			request.Spec.Annotations.Labels["com.docker.swarm.registryauth"] = registryAuth[0]
-		}
 	}
 
 	// TODO(aluzzardi): Consider using `Name` as a primary key to handle
@@ -148,17 +141,6 @@ func (s *Server) UpdateService(ctx context.Context, request *api.UpdateServiceRe
 	}
 	if err := validateServiceSpec(request.Spec); err != nil {
 		return nil, err
-	}
-
-	md, ok := metadata.FromContext(ctx)
-	if ok {
-		// retrieve registry auth from the metadata and update if non-empty
-		registryAuth, exists := md["x-registry-auth"]
-		// TODO(nishanttotla): We don't want to modify the spec. This is a temporary fix
-		// and should go away eventually
-		if exists {
-			request.Spec.Annotations.Labels["com.docker.swarm.registryauth"] = registryAuth[0]
-		}
 	}
 
 	var service *api.Service
