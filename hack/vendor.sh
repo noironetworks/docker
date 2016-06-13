@@ -60,7 +60,7 @@ clone git golang.org/x/net 2beffdc2e92c8a3027590f898fe88f69af48a3f8 https://gith
 clone git golang.org/x/sys eb2c74142fd19a79b3f237334c7384d5167b1b46 https://github.com/golang/sys.git
 clone git github.com/docker/go-units 651fc226e7441360384da338d0fd37f2440ffbe3
 clone git github.com/docker/go-connections fa2850ff103453a9ad190da0df0af134f0314b3d
-clone git github.com/docker/engine-api c44fcec6c3737aca9026a3aa06ca73abc700a3de git://github.com/vieux/engine-api.git
+clone git github.com/docker/engine-api 81912afd799c25dd6ad0cdff585aaebedeadff65 git://github.com/vieux/engine-api.git
 clone git github.com/RackSec/srslog 259aed10dfa74ea2961eddd1d9847619f6e98837
 clone git github.com/imdario/mergo 0.2.1
 
@@ -139,7 +139,7 @@ clone git github.com/docker/docker-credential-helpers v0.3.0
 clone git github.com/docker/containerd cf554d59dd96e459544748290eb9167f4bcde509
 
 # cluster
-clone git github.com/docker/swarmkit 14244c5db660767d755677a76bd7179e950fa944
+clone git github.com/docker/swarmkit 47fcee61dbbd7dc25fac2a5119cf667814a688d8
 clone git github.com/golang/mock bd3c8e81be01eef76d4b503f5e687d2d1354d2d9
 clone git github.com/gogo/protobuf 43a2e0b1c32252bfbbdf81f7faa7a88fb3fa4028
 clone git github.com/cloudflare/cfssl 92f037e39eb103fb30f9151be40d9ed267fc4ae2
