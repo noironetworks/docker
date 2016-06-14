@@ -174,10 +174,10 @@ func (r *restartPolicyOptions) ToRestartPolicy() *swarm.RestartPolicy {
 	}
 }
 
-func convertNetworks(networks []string) []swarm.NetworkAttachmentConfig {
+func convertNetworks(networks, aliases []string) []swarm.NetworkAttachmentConfig {
 	nets := []swarm.NetworkAttachmentConfig{}
 	for _, network := range networks {
-		nets = append(nets, swarm.NetworkAttachmentConfig{Target: network})
+		nets = append(nets, swarm.NetworkAttachmentConfig{Target: network, Aliases: aliases})
 	}
 	return nets
 }
@@ -273,11 +273,12 @@ type serviceOptions struct {
 	replicas Uint64Opt
 	mode     string
 
-	restartPolicy restartPolicyOptions
-	constraints   []string
-	update        updateOptions
-	networks      []string
-	endpoint      endpointOptions
+	restartPolicy  restartPolicyOptions
+	constraints    []string
+	update         updateOptions
+	networks       []string
+	networkAliases []string
+	endpoint       endpointOptions
 }
 
 func newServiceOptions() *serviceOptions {
@@ -319,7 +320,7 @@ func (opts *serviceOptions) ToService() swarm.ServiceSpec {
 			Parallelism: opts.update.parallelism,
 			Delay:       opts.update.delay,
 		},
-		Networks:     convertNetworks(opts.networks),
+		Networks:     convertNetworks(opts.networks, opts.networkAliases),
 		EndpointSpec: opts.endpoint.ToEndpointSpec(),
 	}
 
@@ -366,6 +367,7 @@ func addServiceFlags(cmd *cobra.Command, opts *serviceOptions) {
 	flags.DurationVar(&opts.update.delay, "update-delay", time.Duration(0), "Delay between updates")
 
 	flags.StringSliceVar(&opts.networks, "network", []string{}, "Network attachments")
+	flags.StringSliceVar(&opts.networkAliases, "network-alias", []string{}, "Network aliases")
 	flags.StringVar(&opts.endpoint.mode, "endpoint-mode", "", "Endpoint mode(Valid values: VIP, DNSRR)")
 	flags.VarP(&opts.endpoint.ports, "publish", "p", "Publish a port as a node port")
 }
