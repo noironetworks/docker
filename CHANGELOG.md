@@ -5,6 +5,48 @@ information on the list of deprecated flags and APIs please have a look at
 https://docs.docker.com/engine/deprecated/ where target removal dates can also
 be found.
 
+## 1.12.2-rc1 (2016-09-27)
+
+**IMPORTANT**: Docker 1.12 ships with an updated systemd unit file for rpm
+based installs (which includes RHEL, Fedora, CentOS, and Oracle Linux 7). When
+upgrading from an older version of docker, the upgrade process may not
+automatically install the updated version of the unit file, or fail to start
+the docker service if;
+
+### Runtime
+
+- Fix a panic due to a race condition filtering `docker ps` [#26049](https://github.com/docker/docker/pull/26049)
+* Implement retry logic to prevent "Unable to remove filesystem" errors when using the aufs storage driver [#26536](https://github.com/docker/docker/pull/26536)
+* Prevent devicemapper from removing device symlinks if `dm.use_deferred_removal` is enabled [#24740](https://github.com/docker/docker/pull/24740)
+- Fix an issue where the CLI did not return correct exit codes if a command was run with invalid options [#26777](https://github.com/docker/docker/pull/26777)
+- Fix a panic due to a bug in stdout / stderr processing in health checks [#26507](https://github.com/docker/docker/pull/26507)
+- Fix exec's children handling [#26874](https://github.com/docker/docker/pull/26874)
+- Fix exec form of HEALTHCHECK CMD [#26208](https://github.com/docker/docker/pull/26208)
+
+### Networking
+* Vendor libnetwork [#26879](https://github.com/docker/docker/pull/26879) [#26953](https://github.com/docker/docker/pull/26953)
+ * Avoid returning early on agent join failures [docker/libnetwork#1473](https://github.com/docker/libnetwork/pull/1473)
+
+### Swarm Mode
+
+* Do not autodetect advertise address on join [#26211](https://github.com/docker/docker/pull/26211)
+* Vendor SwarmKit [#26765](https://github.com/docker/docker/pull/26765)
+ * Bounce session after failed status update [docker/swarmkit#1539](https://github.com/docker/swarmkit/pull/1539)
+ - Fix possible deadlocks [docker/swarmkit#1537](https://github.com/docker/swarmkit/pull/1537)
+ * Update boltdb dependency [docker/swarmkit#1510](https://github.com/docker/swarmkit/pull/1510)
+ - Fix panic in portallocator and deallocate endpoints when update with none EndpointSpec [docker/swarmkit#1481](https://github.com/docker/swarmkit/pull/1481)
+ * Produce an error if the same port is published twice on `service create` or `service update` [docker/swarmkit#1495](https://github.com/docker/swarmkit/pull/1495)
+ - Fix an issue where changes to a service were not detected, resulting in the service not being updated [docker/swarmkit#1497](https://github.com/docker/swarmkit/pull/1497)
+
+### Contrib
+
+* Update the debian sysv-init script to use `dockerd` instead of `docker daemon` [#25869](https://github.com/docker/docker/pull/25869)
+* Improve stability when running the docker client on MacOS Sierra [#26875](https://github.com/docker/docker/pull/26875)
+
+### Windows
+
+- Fix an issue where arrow-navigation did not work when running the docker client in ConEmu [#25578](https://github.com/docker/docker/pull/25578)
+
 ## 1.12.1 (2016-08-18)
 
 **IMPORTANT**: Docker 1.12 ships with an updated systemd unit file for rpm
